@@ -13,6 +13,8 @@ services:
       - db
     networks:
       - innoscripta
+    volumes:
+      - ./front:/app
 
   backend:
     build:
@@ -25,6 +27,8 @@ services:
       - redis
     networks:
       - innoscripta
+    volumes:
+      - ./backend:/var/www/html
 
   db:
     image: postgres:latest
@@ -32,6 +36,8 @@ services:
       POSTGRES_USER: innoscripta
       POSTGRES_PASSWORD: innoscripta
       POSTGRES_DB: innoscripta
+    ports:
+      - "5432:5432"
     volumes:
       - ./db:/var/lib/postgresql/data
     networks:
@@ -39,6 +45,10 @@ services:
 
   redis:
     image: redis:latest
+    restart: always
+    command: redis-server --save 20 1 --loglevel warning
+    ports:
+      - "6379:6379"
     networks:
       - innoscripta
 
