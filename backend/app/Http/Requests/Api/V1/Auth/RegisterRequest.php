@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Api\V1\Auth;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -11,7 +12,7 @@ class RegisterRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return \Auth::guest();
     }
 
     /**
@@ -22,7 +23,9 @@ class RegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name'     => 'required|min:3|string',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:8' //TODO:: make a decision - will you use password validation
         ];
     }
 }
