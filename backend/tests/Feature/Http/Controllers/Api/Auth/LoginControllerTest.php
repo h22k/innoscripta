@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\Auth;
 
+use App\Exceptions\WrongCredentialException;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -12,7 +13,6 @@ class LoginControllerTest extends BaseApiTest
     public function test_email_field_is_required(): void
     {
         $this->assertThrows(fn() => $this->withoutExceptionHandling()->postJson($this->getLoginRoute(), [
-            'name'     => fake()->name,
             'password' => Str::random(),
         ]), ValidationException::class, 'The email field is required.');
     }
@@ -20,9 +20,25 @@ class LoginControllerTest extends BaseApiTest
     public function test_password_field_is_required(): void
     {
         $this->assertThrows(fn() => $this->withoutExceptionHandling()->postJson($this->getLoginRoute(), [
-            'name'  => fake()->name,
             'email' => fake()->email,
         ]), ValidationException::class, 'The password field is required.');
+    }
+
+    public function test_if_credentials_are_wrong_then_throw_error(): void
+    {
+        $this->assertThrows(fn() => $this->withoutExceptionHandling()->postJson($this->getLoginRoute(), [
+            'email'    => 'fakeemail@email.com',
+            'password' => '324234234',
+        ]), WrongCredentialException::class, WrongCredentialException::MESSAGE);
+    }
+
+    public function test_if_password_is_wrong_then_throw_error()
+    {
+        $user = User::factory()->create();
+        $this->assertThrows(fn() => $this->withoutExceptionHandling()->postJson($this->getLoginRoute(), [
+            'email'    => $user->email,
+            'password' => 'wrong_password',
+        ]), WrongCredentialException::class, WrongCredentialException::MESSAGE);
     }
 
     public function test_login_response_must_has_access_token(): void
