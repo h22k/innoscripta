@@ -2,6 +2,7 @@
 
 namespace App\Http\Response;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Http\JsonResponse;
@@ -14,11 +15,30 @@ class ApiResponse extends JsonResponse
      * @param  array|null  $extraFields
      * @return JsonResponse
      */
-    public static function success(iterable $data, int $status = self::HTTP_OK, ?array $extraFields = null): JsonResponse
-    {
+    public static function success(
+        iterable $data,
+        int $status = self::HTTP_OK,
+        ?array $extraFields = null
+    ): JsonResponse {
         $responseData = self::successDataStructure($data, extraFields: $extraFields);
 
         return new parent($responseData, $status);
+    }
+
+    /**
+     * Sending token's response.
+     *
+     * @param  User  $user
+     * @return JsonResponse
+     */
+    public static function token(User $user): JsonResponse
+    {
+        return self::created([
+            'user'       => $user,
+            'token'      => $user->createToken(),
+            'type'       => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+        ]);
     }
 
     /**
