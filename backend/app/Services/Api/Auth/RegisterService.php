@@ -5,6 +5,7 @@ namespace App\Services\Api\Auth;
 use App\Models\User;
 use Exception;
 
+
 final class RegisterService
 {
 
