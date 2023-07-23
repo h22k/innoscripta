@@ -27,10 +27,12 @@ class LoginControllerTest extends BaseApiTest
 
     public function test_login_response_must_has_access_token(): void
     {
+        $user = User::factory()->create([
+            'password' => $password = Str::random(),
+        ]);
         $response = $this->postJson($this->getLoginRoute(), [
-            'email'    => $email = fake()->email,
-            'name'     => $name = fake()->name,
-            'password' => \Str::random(),
+            'email'    => $email = $user->email,
+            'password' => $password,
         ]);
 
         $this->assertResponseStructure($response);
@@ -38,7 +40,6 @@ class LoginControllerTest extends BaseApiTest
 
         $response->assertCreated();
 
-        $response->assertJsonPath('data.user.name', $name);
         $response->assertJsonPath('data.user.email', $email);
 
         $this->assertArrayHasKey('token', $response['data']);
@@ -56,7 +57,6 @@ class LoginControllerTest extends BaseApiTest
 
         $response = $this->actingAs($user)->postJson($this->getLoginRoute(), [
             'email'    => fake()->email,
-            'name'     => fake()->name,
             'password' => \Str::random(),
         ]);
 
