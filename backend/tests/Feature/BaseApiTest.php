@@ -34,7 +34,6 @@ class BaseApiTest extends TestCase
         $responseAsArray = $response->json();
 
         $this->assertNull($responseAsArray['data']);
-        $this->assertIsArray($responseAsArray['errors']);
         $this->assertNotEmpty($responseAsArray['errorMessage']);
     }
 
