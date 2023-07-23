@@ -21,11 +21,6 @@ class RegisterController extends Controller
     {
         $registeredUser = $registerService->register($request->validated());
 
-        return ApiResponse::created([
-            'user'       => $registeredUser,
-            'token'      => $registeredUser->createToken(),
-            'type'       => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-        ]);
+        return ApiResponse::token($registeredUser);
     }
 }
