@@ -35,9 +35,12 @@ class Handler extends ExceptionHandler
         if ($request->wantsJson()) {
             // custom response
 
+            \Log::error('Error!', [json_encode($e)]);
             if ($e instanceof ValidationException) {
                 return ApiResponse::rejection($e->validator);
             }
+
+            return ApiResponse::error($e->getMessage(), [], $e->getCode() ?? 400);
         }
 
         return parent::render($request, $e);
