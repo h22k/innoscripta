@@ -24,6 +24,8 @@ class NewsClientFactory
 
         return match ($source) {
             NewsSources::NEW_YORK_TIMES->value => \Http::newYorkTimes(),
+            NewsSources::NEWS_API->value       => \Http::newsApi(),
+            NewsSources::THE_GUARDIAN->value   => \Http::theGuardian(),
         };
     }
 

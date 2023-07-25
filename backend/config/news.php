@@ -23,5 +23,13 @@ return [
             ],
         ],
 
+        NewsSources::THE_GUARDIAN->value => [
+            'method_name' => 'theGuardian',
+            'base_url'    => 'https://content.guardianapis.com',
+            'url_params'  => [
+                'api-key' => env('THE_GUARDIAN_API_KEY'),
+            ],
+        ],
+
     ],
 ];
