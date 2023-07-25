@@ -4,11 +4,10 @@ namespace App\Components\News\Clients;
 
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
+use Throwable;
 
 class NewYorkTimesClient extends BaseNewsClient
 {
-
-    protected const NEWS_URL = '/svc/archive/v1/{year}/{month}.json';
 
     /**
      * @return array
@@ -22,11 +21,14 @@ class NewYorkTimesClient extends BaseNewsClient
     }
 
     /**
-     * @return Response
+     * @return array
+     * @throws Throwable
      */
-    protected function getResponse(): Response
+    protected function getResponse(): array
     {
-        return $this->request->withUrlParameters($this->getUrlParameters())->get(self::NEWS_URL);
+        return $this->getNewsFromSource([
+            'urlParams' => $this->getUrlParameters()
+        ]);
     }
 
     /**
@@ -36,5 +38,13 @@ class NewYorkTimesClient extends BaseNewsClient
     protected function extractNews(array $news): array
     {
         return Arr::get($news, 'response.docs');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNewsUri(): string
+    {
+        return '/svc/archive/v1/{year}/{month}.json';
     }
 }
