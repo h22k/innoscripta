@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('news', function (Blueprint $table) {
             $table->id();
             $table->string('source')->index();
-            $table->string('author')->index();
+            $table->string('author')->nullable()->default('Unknown')->index();
             $table->string('title', 500);
             $table->text('description');
             $table->string('url', 500);
