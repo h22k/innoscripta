@@ -10,7 +10,7 @@ return [
         NewsSources::NEW_YORK_TIMES->value => [
             'method_name' => 'newYorkTimes',
             'base_url'    => 'https://api.nytimes.com',
-            'url_params'  => [
+            'query_params'  => [
                 'api-key' => env('NEW_YORK_TIMES_API_KEY'),
             ],
         ],
@@ -18,7 +18,7 @@ return [
         NewsSources::NEWS_API->value => [
             'method_name' => 'newsApi',
             'base_url'    => 'https://newsapi.org/v2',
-            'url_params'  => [
+            'query_params'  => [
                 'apiKey' => env('NEWSAPI_API_KEY'),
             ],
         ],
@@ -26,7 +26,7 @@ return [
         NewsSources::THE_GUARDIAN->value => [
             'method_name' => 'theGuardian',
             'base_url'    => 'https://content.guardianapis.com',
-            'url_params'  => [
+            'query_params'  => [
                 'api-key' => env('THE_GUARDIAN_API_KEY'),
             ],
         ],

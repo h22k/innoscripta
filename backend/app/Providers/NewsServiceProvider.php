@@ -28,7 +28,7 @@ class NewsServiceProvider extends ServiceProvider
     private function addMacrosToHttp(array $sources): void
     {
         foreach ($sources as $source) {
-            \Http::macro($source['method_name'], fn () => \Http::baseUrl($source['base_url'])->withQueryParameters($source['url_params'])->withOptions($source));
+            \Http::macro($source['method_name'], fn () => \Http::baseUrl($source['base_url'])->withQueryParameters($source['query_params'])->withOptions($source));
         }
     }
 }

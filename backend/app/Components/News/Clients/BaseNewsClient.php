@@ -77,7 +77,7 @@ abstract class BaseNewsClient implements NewsHTTPClient
             $requestOptions = $this->request->getOptions();
             $request = $request
                 ->baseUrl(\Arr::get($requestOptions, 'base_url'))
-                ->withQueryParameters(\Arr::get($requestOptions, 'url_params'));
+                ->withQueryParameters(\Arr::get($requestOptions, 'query_params'));
         }
         return $request
             ->withUrlParameters(\Arr::get($options, 'urlParams', []))
