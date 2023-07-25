@@ -7,8 +7,8 @@ readonly class PoolOption
 
     public function __construct(
         private string $increasedKey,
-        private int $startIndex,
-        private int $finishIndex,
+        private int $startIndex = 1,
+        private int $finishIndex = 10,
     )
     {}
 
