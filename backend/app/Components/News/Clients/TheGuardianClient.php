@@ -3,11 +3,14 @@
 namespace App\Components\News\Clients;
 
 use App\Components\News\Helpers\PoolOption;
+use App\Components\News\PoolClient;
 use Illuminate\Support\Arr;
 use Throwable;
 
 class TheGuardianClient extends BaseNewsClient
 {
+    use PoolClient;
+
     const MAX_PAGE_COUNT = 10;
 
     /**
@@ -16,20 +19,11 @@ class TheGuardianClient extends BaseNewsClient
      */
     protected function getResponse(): array
     {
-        $pageStart = 1;
-        $responses = $this->getNewsFromSourceWithPool([
+        return $this->poolResponse([
             'queryParams' => [
-                'page' => $pageStart
+                'page' => 1
             ]
-        ], new PoolOption('queryParams.page', 1, self::MAX_PAGE_COUNT));
-
-        $results = [];
-
-        foreach ($responses as $response) {
-            $results[] = $response->json();
-        }
-
-        return $results;
+        ], new PoolOption('queryParams.page', finishIndex: self::MAX_PAGE_COUNT));
     }
 
     /**
@@ -38,7 +32,7 @@ class TheGuardianClient extends BaseNewsClient
      */
     protected function extractNews(array $news): array
     {
-        return Arr::collapse(\Arr::pluck($news, 'response.results'));
+        return $this->extractPoolNews($news, 'response.results');
     }
 
     /**

@@ -2,13 +2,14 @@
 
 namespace App\Components\News\Clients;
 
-use Illuminate\Http\Client\Response;
+use App\Components\News\Helpers\PoolOption;
+use App\Components\News\PoolClient;
 use Illuminate\Support\Arr;
 
 class NewsApiClient extends BaseNewsClient
 {
 
-    protected const NEWS_URL = '/everything';
+    use PoolClient;
 
     protected const SOURCES_URL = '/top-headlines/sources';
 
@@ -17,13 +18,16 @@ class NewsApiClient extends BaseNewsClient
     protected const MAX_SOURCES_LIMIT = 20;
 
     /**
-     * @return Response
+     * @return array
      */
-    protected function getResponse(): Response
+    protected function getResponse(): array
     {
-        $sources = $this->getNewsApiSources();
-
-        return $this->request->withQueryParameters(compact('sources'))->get(self::NEWS_URL);
+        return $this->poolResponse([
+            'queryParams' => [
+                'sources' => $this->getNewsApiSources(),
+                'page'    => 1
+            ]
+        ], new PoolOption('queryParams.page', finishIndex: self::MAX_SOURCES_LIMIT));
     }
 
     /**
@@ -32,7 +36,7 @@ class NewsApiClient extends BaseNewsClient
      */
     protected function extractNews(array $news): array
     {
-        return Arr::get($news, 'articles');
+        return $this->extractPoolNews($news, 'articles');
     }
 
     /**
@@ -45,9 +49,17 @@ class NewsApiClient extends BaseNewsClient
         });
 
         $sourcesFilteredByLanguage = array_filter(Arr::get($sourcesFromNewsApi, 'sources', []), function ($source) {
-           return Arr::get($source, 'language') === 'en';
+            return Arr::get($source, 'language') === 'en';
         });
 
         return implode(',', array_slice(\Arr::pluck($sourcesFilteredByLanguage, 'id'), 0, self::MAX_SOURCES_LIMIT));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getNewsUri(): string
+    {
+        return '/everything';
     }
 }
