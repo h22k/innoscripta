@@ -30,7 +30,7 @@ abstract class BaseNewsClient implements NewsHTTPClient
     {
         $response = $this->getResponse();
 
-        throw_if($response->failed(), new HttpClientException(sprintf('Response failed! |||| ERROR_JSON::: %s', json_encode($response))));
+        throw_if($response->failed(), new HttpClientException(sprintf('Response failed! |||| ERROR_JSON::: %s', json_encode($response->body()))));
 
         return $this->extractNews($response->json());
     }
