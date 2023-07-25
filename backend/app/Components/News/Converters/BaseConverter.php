@@ -54,10 +54,32 @@ abstract class BaseConverter implements NewsConvertable
             $converted = [];
 
             foreach ($fieldMap as $modelField => $apiField) {
-                $converted[$modelField] = \Arr::get($singleNews, $apiField);
+                $value = $this->isDefaultValue($apiField)
+                    ? $this->getValueWithoutBrackets($apiField)
+                    : \Arr::get($singleNews, $apiField);
+
+                $converted[$modelField] = $value;
             }
 
             return $converted;
         });
+    }
+
+    /**
+     * @param  string  $field
+     * @return bool
+     */
+    private function isDefaultValue(string $field): bool
+    {
+        return \Str::startsWith($field, '{');
+    }
+
+    /**
+     * @param  string  $field
+     * @return string
+     */
+    private function getValueWithoutBrackets(string $field): string
+    {
+        return \Str::remove(['{', '}'], '', $field);
     }
 }
