@@ -80,6 +80,6 @@ abstract class BaseConverter implements NewsConvertable
      */
     private function getValueWithoutBrackets(string $field): string
     {
-        return \Str::remove(['{', '}'], '', $field);
+        return \Str::remove(['{', '}'], $field);
     }
 }
