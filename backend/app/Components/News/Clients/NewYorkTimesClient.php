@@ -8,7 +8,6 @@ use Throwable;
 
 class NewYorkTimesClient extends BaseNewsClient
 {
-
     /**
      * @return array
      */

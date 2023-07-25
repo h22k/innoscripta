@@ -4,7 +4,6 @@ namespace App\Components\News\Clients;
 
 use App\Components\News\Helpers\PoolOption;
 use App\Components\News\PoolClient;
-use Illuminate\Support\Arr;
 use Throwable;
 
 class TheGuardianClient extends BaseNewsClient
