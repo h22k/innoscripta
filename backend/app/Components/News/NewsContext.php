@@ -5,34 +5,23 @@ namespace App\Components\News;
 use App\Components\News\Clients\NewsHTTPClient;
 use App\Components\News\Converters\NewsConvertable;
 use App\Components\News\Processors\NewsProcessable;
-use App\Models\News;
+use App\Components\News\Processors\NewsProcessor;
 
-class NewsContext
+readonly class NewsContext
 {
-    private array $news;
 
     public function __construct(
-        private readonly NewsHTTPClient $client,
-        private readonly NewsConvertable $convertor,
-        private readonly NewsProcessable $processor,
+        private NewsHTTPClient $client,
+        private NewsConvertable $converter,
     ) {
     }
 
-    public function fetchNews(): NewsContext
-    {
-        $this->news = $this->client->getNews();
-
-        return $this;
-    }
-
     /**
-     * @return array<News>
+     * @return NewsProcessable
      */
-    public function processNews(): array
+    public function fetchNews(): NewsProcessable
     {
-        $convertedNews = $this->convertor->convert($this->news);
-
-        return $this->processor->process($convertedNews);
+        return new NewsProcessor($this->converter, $this->client->getNews());
     }
 
 }
