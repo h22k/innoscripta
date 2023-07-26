@@ -2,11 +2,21 @@
 
 namespace App\Components\News\Converters;
 
+use App\Components\News\Converters\Strategies\Contracts\AuthorStrategy;
+use App\Components\News\Converters\Strategies\Contracts\CategoryStrategy;
+use App\Components\News\Converters\Strategies\Contracts\SourceStrategy;
+use App\Components\News\Helpers\DefaultValue;
 use App\Models\News;
 use Throwable;
 
 abstract class BaseConverter implements NewsConvertable
 {
+    use DefaultValue;
+
+    public function __construct(private readonly AuthorStrategy|CategoryStrategy|SourceStrategy $strategy)
+    {
+    }
+
     abstract protected function getFieldMap(): array;
 
     /**
@@ -14,7 +24,9 @@ abstract class BaseConverter implements NewsConvertable
      */
     private function getFillableFieldsFromNewsModel(): array
     {
-        return (new News)->getFillable();
+        return array_filter((new News)->getFillable(), function ($key) {
+            return ! \Str::endsWith($key, '_id');
+        });
     }
 
     /**
@@ -41,6 +53,24 @@ abstract class BaseConverter implements NewsConvertable
     }
 
     /**
+     * @param  array  $convertedNews
+     * @param  array  $singleNews
+     * @return void
+     */
+    private function setNewsMeta(array &$convertedNews, array $singleNews): void
+    {
+        if ($this->strategy instanceof SourceStrategy) {
+            $convertedNews['meta']['source'] = $this->strategy->prepareSource($singleNews);
+        }
+        if ($this->strategy instanceof AuthorStrategy) {
+            $convertedNews['meta']['author'] = $this->strategy->prepareAuthor($singleNews);
+        }
+        if ($this->strategy instanceof CategoryStrategy) {
+            $convertedNews['meta']['category'] = $this->strategy->prepareCategory($singleNews);
+        }
+    }
+
+    /**
      * @param  array  $news
      * @return array
      * @throws Throwable
@@ -59,27 +89,10 @@ abstract class BaseConverter implements NewsConvertable
                     : \Arr::get($singleNews, $apiField);
 
                 $converted[$modelField] = $value;
+                $this->setNewsMeta($converted, $singleNews);
             }
 
             return $converted;
         });
-    }
-
-    /**
-     * @param  string  $field
-     * @return bool
-     */
-    private function isDefaultValue(string $field): bool
-    {
-        return \Str::startsWith($field, '{');
-    }
-
-    /**
-     * @param  string  $field
-     * @return string
-     */
-    private function getValueWithoutBrackets(string $field): string
-    {
-        return \Str::remove(['{', '}'], $field);
     }
 }

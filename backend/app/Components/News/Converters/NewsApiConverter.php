@@ -11,10 +11,8 @@ class NewsApiConverter extends BaseConverter
     protected function getFieldMap(): array
     {
         return [
-            'source'       => 'source.name',
             'title'        => 'title',
             'description'  => 'description',
-            'author'       => 'author',
             'published_at' => 'publishedAt',
             'url'          => 'url',
             'content'      => 'content',

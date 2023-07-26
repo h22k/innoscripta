@@ -12,10 +12,8 @@ class NewYorkTimesConverter extends BaseConverter
     protected function getFieldMap(): array
     {
         return [
-            'source'       => 'source',
             'title'        => 'headline.main',
             'description'  => 'lead_paragraph',
-            'author'       => 'byline.original',
             'published_at' => 'pub_date',
             'url'          => 'web_url',
             'content'      => 'lead_paragraph',
