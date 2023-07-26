@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->id();
-            $table->string('source')->index();
-            $table->string('author')->nullable()->default('Unknown')->index();
+            $table->foreignId('author_id')->constrained();
+            $table->foreignId('category_id')->nullable()->constrained();
             $table->string('title', 500);
             $table->text('description');
             $table->string('url', 500);
