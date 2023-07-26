@@ -9,6 +9,7 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Pool;
 use Illuminate\Http\Client\Response;
 use Throwable;
+use Illuminate\Support\Facades\Http;
 
 abstract class BaseNewsClient implements NewsHTTPClient
 {
@@ -55,7 +56,7 @@ abstract class BaseNewsClient implements NewsHTTPClient
         /**
          * @var array<PromiseInterface | Response> $responses
          */
-        $responses = $this->request->pool(function (Pool $pool) use ($options, $poolOption) {
+        $responses = Http::pool(function (Pool $pool) use ($options, $poolOption) {
             for ($i = $poolOption->getStartIndex(); $i <= $poolOption->getFinishIndex(); $i++) {
                 \Arr::set($options, $poolOption->getIncreasedKey(), $i);
                 $requests[] = $this->prepareRequest($pool, $options);
