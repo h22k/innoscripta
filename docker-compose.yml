@@ -32,6 +32,31 @@ services:
       - vendor:/var/www/html/vendor/
       - ./backend:/var/www/html
 
+  horizon:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    networks:
+      - innoscripta
+    volumes:
+      - vendor:/var/www/html/vendor/
+      - ./backend:/var/www/html
+    command: php artisan horizon
+  
+  cronjob:
+    build:
+      context: .
+      dockerfile: cron.dockerfile
+    depends_on:
+      - backend
+    networks:
+      - innoscripta
+    volumes:
+      - vendor:/var/www/html/vendor/
+      - ./backend:/var/www/html
+  
   db:
     image: postgres:latest
     environment:
