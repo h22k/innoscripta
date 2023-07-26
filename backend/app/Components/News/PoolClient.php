@@ -6,6 +6,7 @@ use App\Components\News\Helpers\PoolOption;
 use GuzzleHttp\Promise\PromiseInterface;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
+use Throwable;
 
 trait PoolClient
 {
@@ -24,6 +25,7 @@ trait PoolClient
      * @param  array  $options
      * @param  PoolOption  $poolOption
      * @return array
+     * @throws Throwable
      */
     protected function poolResponse(array $options, PoolOption $poolOption): array
     {
@@ -32,6 +34,7 @@ trait PoolClient
         $results = [];
 
         foreach ($responses as $response) {
+            throw_if($response->failed(), \Exception::class, json_encode($response->body()));
             $results[] = $response->json();
         }
 
