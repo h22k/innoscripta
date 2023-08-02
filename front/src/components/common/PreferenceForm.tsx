@@ -5,22 +5,22 @@ import PreferenceCard from './PreferenceCard';
 
 export default function PreferenceForm({  }){
 
-  const sourceOptions = ['BBC', 'new york times', 'abc news']
-  const authorOptions = ['hako', 'meliko', 'nazo', 'zeyno']
+    const sourceOptions = ['BBC', 'new york times', 'abc news']
+    const authorOptions = ['hako', 'meliko', 'nazo', 'zeyno']
 
-  const handleSubmit = () => {
+    const handleSubmit = () => {
     
-  }
+    }
 
-  return(
-    <Form method="dialog" className="modal-box" onSubmit={handleSubmit}>
-      <Container className='space-y-6'>
-        <PreferenceCard options={sourceOptions} title='source preference'/>
-        <PreferenceCard options={authorOptions} title='author preference'/>
-      </Container>
-      <Container className="modal-action">
-        <Button className="btn">Save</Button>
-      </Container>
-    </Form>
-  );
+    return(
+        <Form method="dialog" className="modal-box" onSubmit={handleSubmit}>
+            <Container className='space-y-6'>
+                <PreferenceCard options={sourceOptions} title='source preference'/>
+                <PreferenceCard options={authorOptions} title='author preference'/>
+            </Container>
+            <Container className="modal-action">
+                <Button className="btn">Save</Button>
+            </Container>
+        </Form>
+    );
 }

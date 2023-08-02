@@ -15,7 +15,7 @@ class NewsApiClient extends BaseNewsClient
 
     public const NEWS_API_SOURCES_CACHE_KEY = 'news_api_sources';
 
-    protected const MAX_SOURCES_LIMIT = 20;
+    protected const MAX_SOURCES_LIMIT = 3;
 
     /**
      * @return array

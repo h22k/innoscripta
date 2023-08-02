@@ -14,8 +14,8 @@ services:
     networks:
       - innoscripta
     volumes:
-      - node_modules:/app/node_modules
       - ./front:/app
+      - /app/node_modules
 
   backend:
     build:
@@ -96,12 +96,6 @@ networks:
   innoscripta:
     driver: bridge
 volumes:
-  node_modules:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: ./front/node_modules
   vendor:
     driver: local
     driver_opts:

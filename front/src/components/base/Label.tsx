@@ -1,7 +1,7 @@
 export default function Label({ children, ...rest }){
-  return(
-    <label {...rest}>
-      {children}
-    </label>
-  );
+    return(
+        <label {...rest}>
+            {children}
+        </label>
+    );
 }

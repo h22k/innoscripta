@@ -1,7 +1,7 @@
 export default function Dialog({ children, ...rest }){
-  return(
-    <dialog {...rest}>
-      {children}
-    </dialog>
-  );
+    return(
+        <dialog {...rest}>
+            {children}
+        </dialog>
+    );
 }

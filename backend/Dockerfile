@@ -36,5 +36,7 @@ COPY . .
 # Run necessary commands
 RUN composer install
 
+RUN php artisan migrate
+
 # Start the PHP server
 CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

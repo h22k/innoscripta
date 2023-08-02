@@ -61,7 +61,7 @@ class BaseFieldStrategy
         foreach ($fields as $key => $field) {
             $modelFields[$key] = $this->isDefaultValue($field)
                 ? $this->getValueWithoutBrackets($field)
-                : \Arr::get($news, $field);
+                : $this->setFieldIfValueIsNull(\Arr::get($news, $field));
         }
 
         throw_unless(count(array_filter($modelFields, function ($key) use ($modelFillable) {
@@ -69,6 +69,15 @@ class BaseFieldStrategy
             }, ARRAY_FILTER_USE_KEY)) === count($modelFields));
 
         return $modelFields;
+    }
+
+    /**
+     * @param  string|null  $value
+     * @return string
+     */
+    private function setFieldIfValueIsNull(string | null $value): string
+    {
+        return is_null($value) ? 'Unknown' : $value;
     }
 
 }

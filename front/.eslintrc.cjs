@@ -23,5 +23,7 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/no-non-null-assertion': 'off',
+    "object-curly-spacing": ["error", "always"],
+    "indent": ["error", 4]
   },
 }
