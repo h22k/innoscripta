@@ -23,7 +23,7 @@ I wrote some tests for Auth process, so that you guys can run tests.
 Only thing you should do for running tests is run `docker compose exec backend bash` and after that `php artisan test` inside of container bash.
 
 ## ENV
-I have added some keys that you must fill them for fetching news from sources. 
+I have added some keys to `.enx.example` that you must fill them for fetching news from sources. 
 _**I did not check wheter keys are valid!**_
 
 ## Tools
