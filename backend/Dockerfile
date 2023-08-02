@@ -36,6 +36,8 @@ COPY . .
 # Run necessary commands
 RUN composer install
 
+RUN php artisan key:generate
+RUN php artisan jwt:secret
 RUN php artisan migrate
 
 # Start the PHP server

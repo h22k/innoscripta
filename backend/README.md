@@ -1,66 +1,51 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Sources
+I have used 3 different sources as asked from me, these sources can be counted as NewsAPI, The Guardian and New York Times.
 
-## About Laravel
+## Structure
+I have all I need about the news sources inside of `config/news.php`,
+I suggest you to take a look to get a better understanding.
+I used Schedule Task that sends a request to the 3 different sources once in every minute,
+which Cronjob service triggers, and as can be seen in the artisan command that I have written,
+I put all the data fetching process to the queue and monitor that process from the Horizon.
+Inside of `storage/logs`,  you will find `laravel.log` and `cron.log` files. You can follow the Cronjob and Schedule Task process' from there.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## PHP
+Since I have used PHP 8.2 >, I have tried to follow trends and integrated them in to my code.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Match statement | `app/Components/News/NewsClientFactory.php`
+- Constructor property promotion | `app/Components/News/NewsContext.php`
+- Readonly keyword | `app/Components/News/NewsClientFactory.php`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Testing
+I wrote some tests for Auth process, so that you guys can run tests.
+Only thing you should do for running tests is run `docker compose exec backend bash` and after that `php artisan test` inside of container bash.
 
-## Learning Laravel
+## ENV
+I have added some keys that you must fill them for fetching news from sources. 
+_**I did not check wheter keys are valid!**_
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tools
+- Laravel Horizon to monitor queue processes.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## HTTP Client
+I have also used pool method for the HTTP Requests so with the async structure, it gave me some performance.
+I have created seperate HTTP clients for all sources with macro method that Laravel's HTTP's macroable trait has.
+Apart from those, I have created some exception classes and tried to catch them with global handlers.
+And I also have a fixed response structure that you can find in `app/Http/Response/ApiResponse.php` .
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Process
+In short the proccess is as follows, http client sends a requests, than converter takes the response and converts it into a befiting form for the database.
+After that, processor takes the information - author,  category,  source,  news - and saves them to the database.
 
-## Laravel Sponsors
+## Code Quality
+I have tried to follow the SOLID, KISS and DRY principles as much as I can and also followed some design patterns that I will talk more about  in a little bit and I thought were useful.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- As for the model filtering, I have used filter classes to make the
+  code more readable and easier to test, you can take a look at them at
+  `app/Filters`.
+- With using dependency injection, I have validated the inputs inside FormRequest classes.
+- Created some traits for the classes that I have used the same methods inside.
+- Since data structures are not same for data I have fetched from the sources, I have used Strategy Pattern inside of Converter class. You can see it in `app/Components/News/Converters`.
+- I have followed Factory Pattern. You can also find this in `app/Components/News/*Factory.php`.

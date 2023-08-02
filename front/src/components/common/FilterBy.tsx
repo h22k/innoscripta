@@ -8,8 +8,7 @@ export default function FilterBy({ by }){
 
     const filterList = {
         date : [
-            'latest',
-            'earliest'
+            <ListElement>hakan</ListElement>
         ],
 
         category : [
