@@ -1,69 +1,60 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import url('https://fonts.googleapis.com/css2?family=Victor+Mono:wght@200;300;400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
+#root {
+  @apply font-victor-mono bg-neutral-100 min-h-screen text-base
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+::selection {
+  @apply bg-red-700/50 text-gray-300
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.main-card:not(:first-child) h2 {
+  font-size: medium;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.main-card:nth-child(2), .main-card:nth-child(3) {
+  @apply sm:col-span-1
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+.main-card:not(:first-child) p {
+  font-size: small;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.main-card:not(:first-child).main-card:not(:last-child), .mini-card:not(:last-child) {
+  @apply border-b border-red-700/30
+}
+
+.main-card:not(:first-child) .card-body {
+  @apply py-0 px-2
+}
+
+.main-card:nth-child(2) figure, .main-card:nth-child(3) figure {
+  @apply sm:hidden
+}
+
+.main-card:first-child figure img {
+  @apply max-h-full
+}
+
+.main-card:first-child {
+  @apply py-0 my-6
+}
+
+.mini-card p{
+  @apply text-xs sm:line-clamp-2
+}
+
+.mini-card figure{
+  @apply sm:w-96
+}
+
+.mini-card .card-body {
+  @apply p-4
+}
+
+.main-card:first-child .header-section {
+  @apply flex-col items-start
 }

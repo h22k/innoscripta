@@ -3,6 +3,7 @@
 namespace App\Jobs\Helpers;
 
 use App\Components\News\NewsContext;
+use App\Models\News;
 
 trait NewsFetcher
 {
@@ -15,13 +16,21 @@ trait NewsFetcher
         $startTime = time();
         \Log::info("Started to fetch news from $sourceName");
 
-        $context->fetchNews()->process();
+        $startNewsCount = News::count();
+
+        try {
+            $context->fetchNews()->process();
+        } catch (\Exception $exception) {
+            \Log::info("something went wrong while processing $sourceName data |||| ". json_encode($exception));
+        }
 
         $finishTime = time();
+        $finishNewsCount = News::count();
 
-        $diff = $finishTime - $startTime;
+        $timeDiff = $finishTime - $startTime;
+        $countDiff = $finishNewsCount - $startNewsCount;
 
-        \Log::info("Finished to fetch. It took $diff s!");
+        \Log::info("Finished to fetch from $sourceName . It took $timeDiff s! Added $countDiff news!");
     }
 
 }
