@@ -6,6 +6,8 @@ actually it is pretty simple, all you have to do is typing this line of code to 
 
     docker compose up -d
 
+and open `localhost:3000` in your browser.
+
 after this line of code everything that is needed for the project  to run, including Laravel Horizon and Cronjob, will start.
 
 In general, React.js with Typescript for front-end, Laravel for back-end, Laravel Horizon for queue tracking and monitoring, and Cronjob for job scheduling has been used in this project.
